@@ -9,7 +9,12 @@ services:
     user: "$_UID:$_GID"
     volumes:
       - "./:$APP_SOURCE_ROOT"
+      - "./docker/php-fpm/etc/php.ini:/usr/local/etc/php/php.ini"
     working_dir: "$APP_SOURCE_ROOT"
+    depends_on:
+      - postgres
+    environment:
+      - "PHP_IDE_CONFIG=serverName=Docker"
 
   nginx:
     image: "nginx:1.19.3-alpine"
@@ -36,3 +41,16 @@ services:
       - "$COMPOSER_CACHE_DIR:$COMPOSER_CACHE_DIR"
       - "./:$APP_SOURCE_ROOT"
     command: "composer install"
+
+  postgres:
+    image: "postgres:12-alpine"
+    env_file: .env
+    environment:
+      - "POSTGRES_USER=$DB_USERNAME"
+      - "POSTGRES_PASSWORD=$DB_PASSWORD"
+      - "POSTGRES_DB=$DB_DATABASE"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./var/postgres-data:/var/lib/postgresql/data
+

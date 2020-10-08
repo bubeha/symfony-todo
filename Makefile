@@ -16,3 +16,12 @@ down:
 	export _UID="${UID}" \
         && export _GID="${GID}" \
 		&& time docker-compose down
+
+cs:
+	./vendor/bin/phpcs --standard=./phpcs.xml
+
+phpmd:
+	./vendor/bin/phpmd src/ text codesize,unusedcode,./phpmd.xml
+
+psalm:
+	./vendor/bin/psalm
