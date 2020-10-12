@@ -11,6 +11,8 @@ services:
       - "./:$APP_SOURCE_ROOT"
       - "./docker/php-fpm/etc/php.ini:/usr/local/etc/php/php.ini"
     working_dir: "$APP_SOURCE_ROOT"
+    links:
+      - postgres
     depends_on:
       - postgres
     environment:
@@ -46,9 +48,9 @@ services:
     image: "postgres:12-alpine"
     env_file: .env
     environment:
-      - "POSTGRES_USER=$DB_USERNAME"
-      - "POSTGRES_PASSWORD=$DB_PASSWORD"
-      - "POSTGRES_DB=$DB_DATABASE"
+      - "POSTGRES_USER=$POSTGRES_USER"
+      - "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
+      - "POSTGRES_DB=$POSTGRES_DB"
     ports:
       - "5432:5432"
     volumes:
